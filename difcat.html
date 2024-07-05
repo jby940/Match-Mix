@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Category and Difficulty</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            background-image: url(./images/difcat.png);
+        }
+    </style>
+</head>
+<body>
+    <button class="back-button" onclick="goBack()">Back</button>
+    <a href="category.html"><button class="difcat-button">Select Category</button></a>
+    <a href="difficulty.html"><button class="difcat-button">Select Difficulty</button></a>
+    <a href="game.html"><button class="play-button">Play</button></a>
+
+    <script>
+        function goBack() {
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+</html>

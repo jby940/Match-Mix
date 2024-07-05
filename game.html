@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memory Game</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            background-image: url(images/gamearea.png);
+        }
+    </style>
+</head>
+<body>
+    <button class="back-button" onclick="goBack()">Back</button>
+    <div class="container">
+        <div class="timer-container">
+            <div class="timer" id="timer">01:00</div>
+            <div class="turn-timer">
+                <div id="turnTimerBar" class="turn-timer-bar"></div>
+            </div>
+        </div>
+        <div class="grid" id="gameGrid"></div>
+    </div>
+    <div class="info">
+        <div class="scoreboard">
+            <div id="player1" class="player player1 active">PLAYER 1: <span id="score1">0</span></div>
+            <div id="player2" class="player player2">PLAYER 2: <span id="score2">0</span></div>
+        </div>            
+    </div>
+    <div id="movePrompt" class="move-prompt">MIX TIME!</div>
+    <div id="matchPrompt" class="match-prompt">MATCH TIME!</div>
+    <div id="winnerPrompt" class="winner-prompt">
+        <button class="restart-button">Restart Game</button>
+    </div>
+
+    <div class="audio-controls">
+        <button id="playPauseBtn">&#128263;</button>
+        <input id="volumeControl" type="range" min="0" max="1" step="0.01" value="0.5">
+    </div>
+
+    <audio id="backgroundMusic" loop>
+        <source src="bgmusic/bgmusic.mp3" type="audio/mpeg">
+    </audio>
+
+    <script src="script.js"></script>
+    <script>
+        function goBack() {
+            window.location.href = 'difcat.html';
+        }
+        
+        function setDifficulty(difficulty) {
+            const gameContainer = document.querySelector('.game-container');
+            gameContainer.classList.remove('easy', 'medium', 'hard');
+            gameContainer.classList.add(difficulty);
+        }
+
+        const backgroundMusic = document.getElementById('backgroundMusic');
+        const playPauseBtn = document.getElementById('playPauseBtn');
+        const volumeControl = document.getElementById('volumeControl');
+
+        playPauseBtn.addEventListener('click', function() {
+            if (backgroundMusic.paused) {
+                backgroundMusic.play();
+                playPauseBtn.innerHTML = '&#128266;';
+            } else {
+                backgroundMusic.pause();
+                playPauseBtn.innerHTML = '&#128263;';
+            }
+        });
+
+        volumeControl.addEventListener('input', function() {
+            backgroundMusic.volume = volumeControl.value;
+        });
+    </script>
+</body>
+</html>

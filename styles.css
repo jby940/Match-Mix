@@ -1,0 +1,1024 @@
+@font-face {
+    font-family: 'Press Start 2P';
+    src: url('fonts/Pixeled.ttf') format('TrueType');
+    font-weight: normal;
+    font-style: normal;
+}
+
+body {
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-attachment: fixed;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    font-family: 'Press Start 2P', sans-serif;
+    font-size: 1.5vw;
+}
+
+/* start of css button */
+button {
+    font-family: 'Press Start 2P', sans-serif;
+    font-weight: bold;
+    border: none;
+    border-radius: 1rem;
+    cursor: pointer;
+    padding: 1em;
+    font-size: 1.5vw;
+    position: relative;
+    z-index: 0;
+    color: #ddd;
+}
+
+.back-button {
+    padding: 0.5em;
+    font-size: 2vw;
+    position: absolute;
+    top: 3rem;
+    left: 3rem; 
+}
+
+.start-button {
+    padding: 0.5em 1em;
+    font-size: 2vw;
+    position: absolute;
+    top: 65%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.difcat-button {
+    padding: 1em;
+    font-size: 2.5vw;
+    margin: 1rem;
+}
+
+.play-button {
+    padding: 0.75em;
+    font-size: 2vw; 
+    margin: 1rem;
+}
+
+.category-button, .difficulty-button {
+    font-family: 'Press Start 2P', sans-serif;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+    padding: 1em;
+    font-size: 2.5vw;
+    margin: 1.25rem;
+    border-radius: 1rem;
+    position: relative;
+    z-index: 0;
+    color: #ddd;
+}
+
+button::after, .category-button::after, .difficulty-button::after {
+    content: "";
+    z-index: -1;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: #000;
+    left: 0;
+    top: 0;
+    border-radius: 1rem;
+}
+
+button::before, .category-button::before, .difficulty-button::before {
+    content: "";
+    background: linear-gradient(
+        45deg,
+        #FF0000, #FF7300, #FFFB00, #48FF00,
+        #00FFD5, #002BFF, #FF00C8, #FF0000
+    );
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    background-size: 600%;
+    z-index: -1;
+    width: calc(100% + 4px);
+    height: calc(100% + 4px);
+    filter: blur(8px);
+    animation: glowing 20s linear infinite;
+    transition: opacity .3s ease-in-out;
+    border-radius: 1rem;
+    opacity: 0;
+}
+
+@keyframes glowing {
+    0% {background-position: 0 0;}
+    50% {background-position: 400% 0;}
+    100% {background-position: 0 0;}
+}
+
+button:hover::before, .category-button:hover::before, .difficulty-button:hover::before {
+    opacity: 1;
+}
+
+button:active::after, .category-button:active::after, .difficulty-button:active::after {
+    background: transparent;
+}
+
+button:active, .category-button:active, .difficulty-button:active {
+    color: #000;
+    font-weight: bold;
+}
+/* end of css button */
+
+/* start of css text */
+.info {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    margin-bottom: 1rem;
+}
+
+.player {
+    font-size: 1.5vw;
+    width: 15%;
+    text-align: center;
+    font-family: 'Press Start 2P', sans-serif;
+    padding: 0.5em 0.25em;
+    color: white;
+}
+
+.player1, .player2 {
+    background-image: url(images/bg.jpg);
+    background-size: cover;
+    text-align: center;
+    position: fixed;
+    transform: translateY(-50%);
+}
+
+.player1 {
+    left: 4rem; 
+    top: 35%;
+}
+
+.player2 {
+    left: 4rem;
+    top: 65%;
+}
+
+.player.active {
+    font-weight: bold;
+    color: #0000FF;
+}
+
+#score1, #score2 {
+    font-size: 3vw;
+    color: #000;
+    font-weight: bold;
+}
+
+.move-prompt, .match-prompt {
+    font-family: 'Press Start 2P', sans-serif;
+    width: 2%;
+    text-align: center;
+    color: #000; 
+    white-space: pre;
+    writing-mode: vertical-rl;
+    text-orientation: upright;
+    font-size: 1.5vw;
+}
+
+#movePrompt, #matchPrompt {
+    position: fixed;
+    top: 15%;
+    bottom: 15%;
+    right: 4rem;
+    transform: translateX(-50%);
+    background-color: #00ffff;
+    color: #000;
+    padding: 1em 1em;
+    border-radius: 5px;
+    z-index: 1000;
+    display: none;
+}
+
+.winner-prompt {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    padding: 2rem;
+    border-radius: 1rem;
+    font-family: 'Press Start 2P', sans-serif;
+    font-size: 5rem;
+    color: #000;
+    text-align: center;
+    z-index: 10000;
+    width: 40%;
+    height: 50%;
+    background-image: url(images/bg.jpg);
+    background-size: cover;
+}
+/* end of css text */
+
+/* start of css game display */
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    margin-top: 2em;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    padding: 1rem;
+    box-sizing: border-box;
+    background-image: url(images/gc.png);
+    background-position: center;
+    margin-top: 2rem;
+}
+
+.easy, .medium, .hard {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin: auto;
+    box-sizing: border-box;
+    padding: 1rem;
+    max-width: 100%;
+}
+
+.tile {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    aspect-ratio: 1;
+    border-radius: 1rem;
+    position: relative;
+    transition: transform 0.3s;
+    transform-style: preserve-3d;
+    cursor: pointer;
+    flex-wrap: wrap;
+    max-width: 200px;
+    max-height: 180px;
+    background-image: url(images/gamecontainer.jpg);
+    background-size: cover;
+}
+
+.tile-item {
+    width: 30%;
+    height: 30%;
+    border-radius: 50%;
+    background-image: url(images/logo2.png);
+    background-size: cover;
+    margin: 5%;
+    position: relative;
+    cursor: pointer;
+}
+
+.tile-item img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    backface-visibility: hidden;
+    transition: transform 0.3s, background-color 0.3s;
+}
+
+.tile-item.matched {
+    transform: scale(1.2);
+    cursor: default;
+    pointer-events: none;
+}
+
+.tile.empty {
+    background-color: transparent;
+    border: 1px dashed #ccc;
+    cursor: default;
+}
+
+.tile-item.hidden img {
+    visibility: hidden;
+}
+
+.tile-item.flipped img {
+    visibility: visible;
+}
+
+.timer-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem;
+    background-color: #222;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.timer {
+    font-family: 'Press Start 2P', sans-serif;
+    font-size: 2rem;
+    font-weight: bold;
+    background-color: #000;
+    padding: 0.5rem 1rem;
+    color: #ddd;
+    flex-shrink: 0;
+}
+
+.turn-timer {
+    width: 50%;
+    height: 3rem;
+    background-color: #eee;
+    position: relative;
+    flex-grow: 1;
+    margin-left: 1rem;
+}
+
+.turn-timer-bar {
+    width: 100%;
+    height: 100%;
+    background-color: red;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+
+.audio-controls button {
+    margin-right: 1em;
+    background: none;
+    border: none;
+    font-size: 1rem;
+    cursor: pointer;
+    position: absolute;
+    top: 80%;
+    left: 10%;
+}
+.audio-controls input[type="range"] {
+    width: 7rem;
+    position: absolute;
+    top: 90%;
+    left: 8%;
+}
+/* end of css game display */
+
+/* Media Queries */
+/* Very small devices (up to 320px) */
+@media (max-width: 320px) {
+    body {
+        font-size: 1rem;
+    }
+
+    button {
+        font-size: 0.5rem;
+        margin-top: 1rem;
+    }
+
+    .back-button {
+        font-size: 1rem;
+        top: 1rem;
+        left: 1rem; 
+        margin-top: auto;
+    }
+
+    .start-button {
+        font-size: 1rem;
+    }
+
+    .difcat-button {
+        font-size: 1.3rem;
+    }
+
+    .play-button {
+        font-size: 1.2rem;
+    }
+
+    .category-button, .difficulty-button {
+        font-size: 1rem;
+    }
+
+    table {
+        width: 100%;
+    }
+    tbody {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    tr {
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+    }
+    td {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+    }
+
+    .player {
+        font-size: 0.75rem;
+        width: 40%;
+    }
+
+    .player1 {
+        left: 1rem; 
+        top: 15%;
+    }
+
+    .player2 {
+        left: 10.5rem;
+        top: 15%;
+    }
+
+    #score1, #score2 {
+        font-size: 8vw;
+    }
+
+    .move-prompt, .match-prompt {
+        writing-mode: horizontal-tb;
+        text-orientation: mixed;
+        font-size: 4vw;
+        width: auto;
+        white-space: normal;
+    }
+    #movePrompt, #matchPrompt {
+        position: fixed;
+        top: 85%;
+        left: 5%;
+        transform: none;
+        width: 80%;
+        margin: 1rem auto;
+        display: block;
+    }
+
+    .winner-prompt {
+        font-size: 1rem;
+        width: 50%;
+        height: 10%;
+    }
+
+    .timer-container {
+        padding: 0.5rem;
+    }
+
+    .timer {
+        font-size: 1rem;
+    }
+
+    .turn-timer {
+        width: 40%;
+        height: 2rem;
+    }
+    
+    .container {
+        position: relative;
+        margin-top: 3em;
+        width: 100%;
+    }
+    
+    .grid {
+        margin-top: 1rem;
+        width: 300px;
+    }
+    
+    .easy, .medium, .hard {
+        padding: 0.5rem;
+        max-width: 100%;
+    }
+    
+    .tile {
+        width: 80px;
+        max-width: 80px;
+        max-height: 100px;
+    }
+
+    .audio-controls button {
+        margin-right: 1em;
+        font-size: 0.5rem;
+        top: 0.5rem;
+        left: 80%;
+    }
+    .audio-controls input[type="range"] {
+        width: 3rem;
+        position: absolute;
+        top: 7%;
+        left: 76%;
+    }
+}
+
+/* Small to medium devices (321px to 768px) */
+@media (min-width: 321px) and (max-width: 768px) {
+    body {
+        font-size: 1.5vw;
+    }
+    
+    button {
+        font-size: 2rem;
+        margin-top: 4rem;
+    }
+    
+    .back-button {
+        font-size: 2.5vw;
+        top: 1rem;
+        left: 1rem; 
+        margin-top: auto;
+    }
+    
+    .start-button {
+        font-size: 3vw;
+        top: 55%;
+    }
+    
+    .difcat-button {
+        font-size: 3.5vw;
+    }
+    
+    .play-button {
+        font-size: 3vw; 
+    }
+    
+    .category-button {
+        font-size: 3vw;
+    }
+
+    .difficulty-button {
+        font-size: 3.5vw;
+    }
+    
+    .player {
+        font-size: 1.7w;
+        width: 16%;
+    }
+    
+    .player1 {
+        left: 1rem; 
+        top: 35%;
+    }
+    
+    .player2 {
+        left: 1rem;
+        top: 65%;
+    }
+    
+    #score1, #score2 {
+        font-size: 5vw;
+    }
+    
+    .move-prompt, .match-prompt {
+        font-size: 2.5vw;
+    }
+    
+    #movePrompt, #matchPrompt {
+        position: fixed;
+        top: 15%;
+        bottom: 15%;
+        right: 2rem;
+    }
+    
+    .winner-prompt {
+        padding: 2rem;
+        font-size: 2.5rem;
+        width: 50%;
+        height: 60%;
+    }
+
+    .container {
+        position: relative;
+        margin-top: 2em;
+        width: 100%;
+    }
+    
+    .grid {
+        margin-top: 1rem;
+        width: 450px;
+    }
+    
+    .easy, .medium, .hard {
+        padding: 1rem;
+        max-width: 60%;
+    }
+    
+    .tile {
+        width: 120px;
+        max-width: 200px;
+        max-height: 180px;
+    }
+    
+    .timer-container {
+        padding: 0.5rem;
+        width: 100%;
+    }
+    
+    .timer {
+        font-size: 1.2rem;
+    }
+    
+    .turn-timer {
+        width: 50%;
+        height: 2rem;
+    }
+
+    .audio-controls button {
+        margin-right: 1em;
+        font-size: 0.7rem;
+        top: 75%;
+        left: 8%;
+    }
+    .audio-controls input[type="range"] {
+        width: 5rem;
+        position: absolute;
+        top: 90%;
+        left: 5%;
+    }    
+}
+
+
+/* Medium to large devices (769px to 1024px) */
+@media (min-width: 769px) and (max-width: 1024px) {
+    body {
+        font-size: 1.5vw;
+    }
+    
+    button {
+        font-size: 2.5rem;
+        margin-top: 6rem;
+    }
+    
+    .back-button {
+        font-size: 3vw;
+        top: 1rem;
+        left: 1rem; 
+        margin-top: auto;
+    }
+    
+    .start-button {
+        font-size: 3vw;
+        top: 60%;
+    }
+    
+    .difcat-button {
+        font-size: 4vw;
+    }
+    
+    .play-button {
+        font-size: 3.5vw; 
+    }
+    
+    .category-button {
+        font-size: 3vw;
+    }
+
+    .difficulty-button {
+        font-size: 4vw;
+    }
+    
+    .player {
+        font-size: 1.8vw;
+        width: 17%;
+    }
+    
+    .player1 {
+        left: 1rem; 
+        top: 35%;
+    }
+    
+    .player2 {
+        left: 1rem;
+        top: 65%;
+    }
+    
+    #score1, #score2 {
+        font-size: 5vw;
+    }
+    
+    .move-prompt, .match-prompt {
+        font-size: 2.5vw;
+    }
+    
+    #movePrompt, #matchPrompt {
+        position: fixed;
+        top: 15%;
+        bottom: 15%;
+        right: 2rem;
+    }
+    
+    .winner-prompt {
+        margin-top: 1rem;
+        padding: 2rem;
+        font-size: 4rem;
+        width: 50%;
+        height: 60%;
+    }
+
+    .container {
+        position: relative;
+        margin-top: 2em;
+        width: 100%;
+    }
+    
+    .grid {
+        margin-top: 1.5rem;
+        width: 600px;
+    }
+    
+    .easy, .medium, .hard {
+        padding: 1rem;
+        max-width: 60%;
+    }
+    
+    .tile {
+        width: 180px;
+        max-width: 300px;
+        max-height: 280px;
+    }
+    
+    .timer-container {
+        padding: 1rem;
+        width: 100%;
+    }
+    
+    .timer {
+        font-size: 1.5rem;
+    }
+    
+    .turn-timer {
+        width: 50%;
+        height: 2.5rem;
+    }
+
+    .audio-controls button {
+        margin-right: 1em;
+        font-size: 1rem;
+        top: 75%;
+        left: 8%;
+    }
+    .audio-controls input[type="range"] {
+        width: 7rem;
+        position: absolute;
+        top: 90%;
+        left: 5%;
+    }    
+}
+
+/* Medium to large devices (1025px to 1440px) */
+@media (min-width: 1025px) and (max-width: 1440px) {
+    body {
+        font-size: 2vw;
+    }
+    
+    button {
+        font-size: 3rem;
+        margin-top: 10rem;
+    }
+    
+    .back-button {
+        font-size: 2.5vw;
+        top: 1rem;
+        left: 1rem; 
+        margin-top: auto;
+    }
+    
+    .start-button {
+        font-size: 2.5vw;
+        top: 60%;
+    }
+    
+    .difcat-button {
+        font-size: 3vw;
+    }
+    
+    .play-button {
+        font-size: 2.5vw; 
+    }
+    
+    .category-button {
+        font-size: 3vw;
+    }
+
+    .difficulty-button {
+        font-size: 3.5vw;
+    }
+    
+    .player {
+        font-size: 2vw;
+        width: 20%;
+    }
+    
+    .player1 {
+        left: 1rem; 
+        top: 35%;
+    }
+    
+    .player2 {
+        left: 1rem;
+        top: 65%;
+    }
+    
+    #score1, #score2 {
+        font-size: 5vw;
+    }
+    
+    .move-prompt, .match-prompt {
+        font-size: 1.8vw;
+    }
+    
+    #movePrompt, #matchPrompt {
+        position: fixed;
+        top: 15%;
+        bottom: 15%;
+        right: 5rem;
+    }
+    
+    .winner-prompt {
+        padding: 2rem;
+        font-size: 5rem;
+        width: 50%;
+        height: 70%;
+    }
+
+    .container {
+        position: relative;
+        margin-top: 2em;
+        width: 100%;
+    }
+    
+    .grid {
+        margin-top: 1.5rem;
+        width: 700px;
+    }
+    
+    .easy, .medium, .hard {
+        padding: 1rem;
+        max-width: 50%;
+    }
+    
+    .tile {
+        width: 500px;
+        max-width: 200px;
+        max-height: 200px;
+    }
+    
+    .timer-container {
+        padding: 1.5rem;
+        width: 100%;
+    }
+    
+    .timer {
+        font-size: 2rem;
+    }
+    
+    .turn-timer {
+        width: 50%;
+        height: 3rem;
+    }
+
+    .audio-controls button {
+        margin-right: 1em;
+        font-size: 1rem;
+        top: 70%;
+        left: 10%;
+    }
+    .audio-controls input[type="range"] {
+        width: 8rem;
+        position: absolute;
+        top: 90%;
+        left: 7%;
+    }    
+}
+
+/* Extra large devices (1025px and above) */
+@media (min-width: 1441px) {
+    body {
+        font-size: 1.5vw;
+    }
+    
+    button {
+        font-size: 1.5vw;
+    }
+    
+    .back-button {
+        font-size: 2vw;
+        top: 3rem;
+        left: 3rem; 
+    }
+    
+    .start-button {
+        font-size: 2vw;
+        top: 68%;
+        left: 50%;
+    }
+    
+    .difcat-button {
+        padding: 1em;
+        font-size: 2.5vw;
+        margin: 1rem;
+    }
+    
+    .play-button {
+        padding: 0.75em;
+        font-size: 2vw; 
+        margin: 1rem;
+    }
+    
+    .category-button, .difficulty-button {
+        padding: 1em;
+        font-size: 2.5vw;
+        margin: 1.25rem;
+    }
+    
+    .player {
+        font-size: 1.5vw;
+        width: 15%;
+    }
+
+    .player1 {
+        left: 4rem; 
+        top: 35%;
+    }
+    
+    .player2 {
+        left: 4rem;
+        top: 65%;
+    }
+    
+    #score1, #score2 {
+        font-size: 3vw;
+    }
+    
+    .move-prompt, .match-prompt {
+        width: 2%;
+        font-size: 1.5vw;
+    }
+    
+    #movePrompt, #matchPrompt {
+        top: 15%;
+        bottom: 15%;
+        right: 4rem;
+    }
+    
+    .winner-prompt {
+        top: 50%;
+        left: 50%;
+        font-size: 5rem;
+        width: 40%;
+        height: 50%;
+    }
+    
+    .container {
+        margin-top: 2em;
+    }
+    
+    .grid {
+        gap: 1rem;
+        padding: 1rem;
+        margin-top: 2rem;
+    }
+    
+    .easy, .medium, .hard {
+        padding: 1rem;
+        max-width: 100%;
+    }
+    
+    .tile {
+        width: 100%;
+        max-width: 200px;
+        max-height: 180px;
+    }
+    
+    .tile-item {
+        width: 30%;
+        height: 30%;
+        margin: 5%;
+    }
+    
+    .tile-item img {
+        width: 100%;
+        height: 100%;
+        border-radius: 50%;
+    }
+    
+    .timer-container {
+        padding: 1rem;
+        width: 100%;
+    }
+    
+    .timer {
+        font-size: 2rem;
+        padding: 0.5rem 1rem;
+    }
+    
+    .turn-timer {
+        width: 50%;
+        height: 3rem;
+        margin-left: 1rem;
+    }
+   
+}

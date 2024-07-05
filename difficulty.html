@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Difficulty</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            background-image: url(images/select.png);
+        }
+    </style>
+</head>
+<body>
+    <audio id="clickSound">
+        <source src="bgmusic/btnclick.mp3" type="audio/mpeg">
+    </audio>
+
+    <button class="back-button" onclick="goBack()">Back</button>
+    <table>
+        <tbody style="text-align: center;">
+        <tr>
+            <td><div onclick="selectDifficulty('easy')" class="difficulty-button">EASY</div></td>
+        </tr>
+        <tr>
+            <td><div onclick="selectDifficulty('medium')" class="difficulty-button">MEDIUM</div></td>
+        </tr>
+        <tr>
+            <td><div onclick="selectDifficulty('hard')" class="difficulty-button">HARD</div></td>
+        </tr>
+        </tbody>
+    </table>
+
+    <script src="script.js"></script>
+    <script>
+        function playClickSound() {
+        const clickSound = document.getElementById('clickSound');
+        clickSound.currentTime = 0;
+        clickSound.play();
+        }
+
+        function goBack() {
+            playClickSound();
+            window.location.href = 'difcat.html';
+        }
+        function selectDifficulty(difficulty) {
+            playClickSound();
+            localStorage.setItem('selectedDifficulty', difficulty);
+            alert('Difficulty ' + difficulty + ' selected!');
+            window.location.href = 'difcat.html';
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Category</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            background-image: url(images/select.png);
+        }
+    </style>
+</head>
+<body>
+    <audio id="clickSound">
+        <source src="bgmusic/btnclick.mp3" type="audio/mpeg">
+    </audio>
+
+    <button class="back-button" onclick="goBack()">Back</button>
+    <table>
+    <tbody style="text-align: center;">
+    <tr>
+        <td><div onclick="selectCategory('numbers')" class="category-button">NUMBERS</div></td>
+        <td><div onclick="selectCategory('letters')" class="category-button">LETTERS</div></td>
+        <td><div onclick="selectCategory('colors')" class="category-button">COLORS</div></td>
+    </tr>
+    <tr>
+        <td><div onclick="selectCategory('fruits')" class="category-button">FRUITS</div></td>
+        <td><div onclick="selectCategory('animals')" class="category-button">ANIMALS</div></td>
+        <td><div onclick="selectCategory('symbols')" class="category-button">SYMBOLS</div></td>
+    </tr>
+    </tbody>
+    </table>
+    
+    <script src="script.js"></script>
+    <script>
+        function playClickSound() {
+        const clickSound = document.getElementById('clickSound');
+        clickSound.currentTime = 0;
+        clickSound.play();
+        }
+
+        function goBack() {
+            playClickSound();
+            window.location.href = 'difcat.html';
+        }
+        function selectCategory(category) {
+            playClickSound();
+            localStorage.setItem('selectedCategory', category);
+            alert('Category ' + category + ' selected!');
+            window.location.href = 'difcat.html';
+        }
+    </script>
+</body>
+</html>
